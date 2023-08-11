@@ -30,8 +30,6 @@ int main() {
         s.insert(g.compute_code());
     }
 
-    int cnt = -1;
-
     for (int idx1=0; idx1 < (int)v.size(); ++idx1) {
         auto g1 = v[idx1];
         for (auto g2 : v) {
@@ -51,11 +49,5 @@ int main() {
                 }
             }
         }
-        if (((20*idx1)/(int)v.size()) > cnt) {
-            cnt++;
-            cerr << 5*cnt << "% " << std::flush;
-            if (cnt > 0) return 0;
-        }
     }
-    cerr << endl;
 }

@@ -8,7 +8,7 @@ In order to compile a program, use `make name_of_program` in the code directory,
 
 ### Critical Cycle-Canvases
 
-Program `canvas_search` (`canvas_search_parallel`) reads an integer `l` from stdin and outputs the list of chordless critical canvases of cycle length `l`.
+Program `canvas_search` (`canvas_search_parallel`) reads an integer `l` from stdin and outputs the list of chordless critical cycle-canvases of cycle length `l` (including empty cycle).
 
 ### Critical Prism-Canvases
 
