@@ -39,7 +39,6 @@ int main() {
                 if (g2.distance_between_triangles() > 1) continue; 
                 vector<TwoTriangleGraph> fus = TwoTriangleGraph::fuse_triangles(g1, g2);
                 for (auto g3 : fus) {
-                    if (g3.distance_between_triangles() < 5) continue;
                     if (s.find(g3.compute_code()) == s.end()) {
                         if (g3.test_criticality()) {
                             Parallelism::two_triangle_list_mutex.lock();
