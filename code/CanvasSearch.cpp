@@ -538,6 +538,9 @@ CanvasList CanvasSearch::generate_with_size34_chords(int l) const {
     add_smaller_size34_chords(l, critical_with_size34_chords, ans);
     add_smaller_tripods(l, critical_with_size34_chords, ans);
     add_same_size_tripods(l, ans);
+    #ifdef PARALLEL
+    Parallelism::wait_for_threads();
+    #endif
     return ans;
 }
 
@@ -569,6 +572,9 @@ CanvasList& CanvasSearch::get_with_size34_chords(int l) {
     }
     critical_with_size34_chords.resize(l+1);
     add_smaller_size34_chords(l, critical_with_size34_chords, critical_with_size34_chords[l]);
+    #ifdef PARALLEL
+    Parallelism::wait_for_threads();
+    #endif
     return critical_with_size34_chords[l];
 }
 

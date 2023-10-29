@@ -19,6 +19,12 @@ canvas_search_parallel_debug: main_canvas_search_lessmemory.cc $(SRC_FILES)
 canvas_search_readprev: main_canvas_search_readprev.cc $(SRC_FILES)
 	g++ $(PARALLELFLAGS) -o canvas_search_readprev main_canvas_search_readprev.cc *.cpp
 
+canvas_search_with_size_3_4_chords: main_canvas_search_with_size_3_4_chords.cc $(SRC_FILES)
+	g++ $(PERFORMFLAGS) -o canvas_search_with_size_3_4_chords main_canvas_search_with_size_3_4_chords.cc *.cpp
+
+canvas_search_with_size_3_4_chords_parallel: main_canvas_search_with_size_3_4_chords.cc $(SRC_FILES)
+	g++ $(PARALLELFLAGS) -o canvas_search_with_size_3_4_chords_parallel main_canvas_search_with_size_3_4_chords.cc *.cpp
+
 canvas_to_triangles: main_canvas_to_triangles.cc $(SRC_FILES)
 	g++ $(PERFORMFLAGS) -o canvas_to_triangles main_canvas_to_triangles.cc *.cpp
 

@@ -6,9 +6,13 @@ Code for the article "Towards Characterization of 5-List-Colorability of Toroida
 
 In order to compile a program, use `make name_of_program` in the code directory, which will create an executable file with name `name_of_program`. In order to compile a version of the program using multithreading, append `_parallel` to the end of the program name. You can configure the number of threads in the `Parallelism.hh` file. 
 
-### Critical Cycle-Canvases
+### Chordless Critical Cycle-Canvases
 
 Program `canvas_search` (`canvas_search_parallel`) reads an integer `l` from stdin and outputs the list of chordless critical cycle-canvases of cycle length `l` (including empty cycle).
+
+### Critical Cycle-Canvases with Short Chords
+
+Program `canvas_search_with_size_3_4_chords` (`canvas_search_with_size_3_4_chords_parallel`) reads an integer `l` from stdin and outputs the list of critical cycle-canvases of cycle length `l` which have at least one short chord, where a short chord is one where one of the critical canvases resulting from dividing the canvas by the chord has cycle length 3 or 4 (the ones necessary for critical prism-canvases with d >= 2).
 
 ### Critical Prism-Canvases
 
