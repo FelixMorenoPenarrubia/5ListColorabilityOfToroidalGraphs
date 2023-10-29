@@ -20,9 +20,9 @@ void TwoTriangleGraphCode::push(int x) {
     code.push_back(x);
 }
 
-void TwoTriangleGraphCode::push_f(bool precolored) {
-    if(!precolored) code.push_back(-1);
-    else code.push_back(-3);
+void TwoTriangleGraphCode::push_f(int triangle) {
+    if(!triangle) code.push_back(-1);
+    else code.push_back(-2-triangle);
 }
 
 void TwoTriangleGraphCode::push_b() {
@@ -39,6 +39,7 @@ string TwoTriangleGraphCode::to_string() const { //can be made better
         if (code[i] == -1) s.push_back('F');
         else if (code[i] == -2) s.push_back('B');
         else if (code[i] == -3) s.push_back('P');
+        else if (code[i] == -4) s.push_back('Q');
         else if (code[i] <= 9) s.push_back('0'+code[i]);
         else s.push_back('a'+code[i]-10);
     }
@@ -54,6 +55,7 @@ TwoTriangleGraphCode::TwoTriangleGraphCode(const string& s) {
         if (s[i] == 'F') code.push_back(-1);
         else if (s[i] == 'B') code.push_back(-2);
         else if (s[i] == 'P') code.push_back(-3);
+        else if (s[i] == 'Q') code.push_back(-4);
         else if ('0' <= s[i] && s[i] <= '9') code.push_back(s[i]-'0');
         else code.push_back(s[i]-'a'+10);
     }
@@ -179,7 +181,7 @@ TwoTriangleGraph::TwoTriangleGraph(const Canvas& g, int s) {
 TwoTriangleGraph::TwoTriangleGraph(const TwoTriangleGraphCode& code) {
     n = 1;
     for (int i = 0; i < code.size(); ++i) {
-        if (code[i] == -1 || code[i] == -3) n++;
+        if (code[i] == -1 || code[i] == -3 || code[i] == -4) n++;
     }
     al = vector<vector<int>>(n);
     precolored = vector<int>(n);
@@ -187,12 +189,18 @@ TwoTriangleGraph::TwoTriangleGraph(const TwoTriangleGraphCode& code) {
     int cn = 0;
     vector<int> cv_stack;
     cv_stack.push_back(0);
-    vector<int> zero_neigh;
+    //vector<int> zero_neigh;
+    vector<vector<int>> prelim_triangles(2);
+    prelim_triangles[0].push_back(0);
     for (int i = 0; i < code.size(); ++i) {
-        if (code[i] == -1 || code[i] == -3) {
+        if (code[i] == -1 || code[i] == -3 || code[i] == -4) {
             al[cv_stack.back()].push_back(++cn);
             cv_stack.push_back(cn);
-            if (code[i] == -3) precolored[cn] = 1;
+            if (code[i] == -3 || code[i] == -4) {
+                precolored[cn] = 1;
+                if (code[i] == -3) prelim_triangles[0].push_back(cn);
+                else prelim_triangles[1].push_back(cn);
+            }
         }
         else if (code[i] == -2) {
             int a = cv_stack.back();
@@ -202,39 +210,60 @@ TwoTriangleGraph::TwoTriangleGraph(const TwoTriangleGraphCode& code) {
         }
         else {
             al[cv_stack.back()].push_back(code[i]);
-            if (code[i] == 0) {
+            /*if (code[i] == 0) {
                 zero_neigh.push_back(cv_stack.back());
-            }
+            }*/
         }
     }
-    std::reverse(zero_neigh.begin(), zero_neigh.end());
-    for (int x : zero_neigh) al[0].push_back(x);
+    //std::reverse(zero_neigh.begin(), zero_neigh.end());
+    //for (int x : zero_neigh) al[0].push_back(x);
 
     
 
     generate_ral_and_m();
     set_list_sizes();
 
-    vector<int> pcv;
-    for (int u = 0; u < n; ++u) {
-        if(precolored[u]) pcv.push_back(u);
+    if ((int)prelim_triangles[0].size() == 3) {
+        //new code
+        triangles = prelim_triangles;
     }
-    int t2, t3;
-    t2 = t3 = -1;
-    for (int i=1; i < 6 && t2 == -1; ++i) {
-        for (int j=i+1; j < 6 && t2 == -1; ++j) {
-            if (neighbors(pcv[0], pcv[i]) && neighbors(pcv[0], pcv[j]) && neighbors(pcv[i], pcv[j])) {
-                t2 = i;
-                t3 = j;
+    else {
+        //old code
+        vector<int> pcv;
+        for (int u = 0; u < n; ++u) {
+            if(precolored[u]) pcv.push_back(u);
+        }
+        int t2, t3;
+        t2 = t3 = -1;
+        for (int i=1; i < 6 && t2 == -1; ++i) {
+            for (int j=i+1; j < 6 && t2 == -1; ++j) {
+                if (neighbors(pcv[0], pcv[i]) && neighbors(pcv[0], pcv[j]) && neighbors(pcv[i], pcv[j])) {
+                    for (int k=1; k < 6; ++k) {
+                        if (k != t2 && k != t3) {
+                            for (int l=k+1; l < 6; ++l) {
+                                if (l != t2 && l != t3) {
+                                    for (int s=l+1; s < 6; ++s) {
+                                        if (s != t2 && s != t3) {
+                                            if (neighbors(pcv[k], pcv[l]) && neighbors(pcv[l], pcv[s]) && neighbors(pcv[s], pcv[k])) {
+                                                t2 = i;
+                                                t3 = j;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
-    }
-    triangles = vector<vector<int>>();
-    triangles.push_back({pcv[0], pcv[t2], pcv[t3]});
-    triangles.push_back({});
+        triangles = vector<vector<int>>();
+        triangles.push_back({pcv[0], pcv[t2], pcv[t3]});
+        triangles.push_back({});
 
-    for (int i=1; i < 6; ++i) {
-        if (i != t2 && i != t3) triangles[1].push_back(pcv[i]);
+        for (int i=1; i < 6; ++i) {
+            if (i != t2 && i != t3) triangles[1].push_back(pcv[i]);
+        }
     }
 
     path_length = distance_between_triangles();
@@ -296,22 +325,33 @@ void TwoTriangleGraph::write_prolog(std::ostream& os) const {
 vector<TwoTriangleGraph> TwoTriangleGraph::generate_from_canvas(const Canvas& g) {
     vector<TwoTriangleGraph> ans;
     for (int i=0; i < g.l; ++i) {
-        ans.push_back(TwoTriangleGraph(g, i));
+        auto ttg = TwoTriangleGraph(g, i);
+        if (!ttg.has_repeated_edges()) {
+            ans.push_back(ttg);
+        }
     }
     return ans;
 }
 
-void TwoTriangleGraph::dfs_code(int u, int idx, int& c, vector<int>& an, TwoTriangleGraphCode& code) const {
+void TwoTriangleGraph::dfs_code(int u, int idx, int& c, int rt, vector<int>& an, TwoTriangleGraphCode& code) const {
     if (an[u] != -1) {
         code.push(an[u]);
         return;
     }
-    code.push_f(precolored[u]);
+    if (!precolored[u])
+        code.push_f(0);
+    else {
+        int tr = 0;
+        for (int i=0; i < 3; ++i) {
+            if (triangles[1][i] == u) tr = 1;
+        }
+        code.push_f(2-(rt==tr));
+    }
     an[u] = c++;
     int als = (int)al[u].size();
     for (int i=1; i < als; ++i) {
         int v = al[u][(i+idx)%als];
-        dfs_code(v, ral[v].at(u), c, an, code);
+        dfs_code(v, ral[v].at(u), c, rt, an, code);
     }
     code.push_b();
 }
@@ -320,8 +360,19 @@ TwoTriangleGraphCode TwoTriangleGraph::compute_code_edge(int u, int v) const {
     TwoTriangleGraphCode code = TwoTriangleGraphCode();
     vector<int> assigned_numbers (n, -1);
     assigned_numbers[u] = 0;
+    //code.push_f(1);
     int c = 1;
-    dfs_code(v, ral[v].at(u), c, assigned_numbers, code);
+    int rt = 0;
+    for (int i=0; i < 3; ++i) {
+        if (triangles[1][i] == u) rt = 1;
+    }
+    int als = (int)al[u].size();
+    int idx = ral[u].at(v);
+    for (int i=0; i < als; ++i) {
+        int w = al[u][(i+idx)%als];
+        dfs_code(w, ral[w].at(u), c, rt, assigned_numbers, code);
+    }
+    //code.push_b();
     return code;
 }
 
@@ -513,6 +564,9 @@ vector<ListGraph> TwoTriangleGraph::identify_triangles() const {
     p[0] = 0;
     p[1] = 1;
     p[2] = 2;
+    if (!triangles_have_same_orientation()) {
+        std::swap(p[1], p[2]);
+    }
     for (int j=0; j < 3; ++j) {
         ans.emplace_back(identify_vertices(triangles[0], {triangles[1][p[0]], triangles[1][p[1]], triangles[1][p[2]]}).al, vector<int>(n-3, 5));
         p[0]++;
@@ -563,4 +617,16 @@ void TwoTriangleGraph::set_second_triangle_as_inner_face() {
         reverse(triangles[1].begin(), triangles[1].end());
     }
     set_outer_face(triangles[1]);
+}
+
+bool TwoTriangleGraph::triangles_have_same_orientation() const {
+    bool i1 = false;
+    if ((ral[triangles[1][0]].at(triangles[1][1])+1)%((int)al[triangles[1][0]].size()) != ral[triangles[1][0]].at(triangles[1][2])) {
+        i1 = true;
+    }
+    bool i0 = false;
+    if ((ral[triangles[0][0]].at(triangles[0][1])+1)%((int)al[triangles[0][0]].size()) != ral[triangles[0][0]].at(triangles[0][2])) {
+        i0 = true;
+    }
+    return i0 != i1;
 }

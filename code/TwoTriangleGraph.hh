@@ -21,7 +21,7 @@ struct TwoTriangleGraphCode {
 
     void push(int x);
     
-    void push_f(bool precolored);
+    void push_f(int triangle);
 
     void push_b();
 
@@ -86,7 +86,7 @@ struct TwoTriangleGraph : public PrecoloredGraph {
 
     void write_prolog(std::ostream& os) const;
 
-    void dfs_code(int u, int idx, int& c, std::vector<int>& an, TwoTriangleGraphCode& code) const;
+    void dfs_code(int u, int idx, int& c, int rt, std::vector<int>& an, TwoTriangleGraphCode& code) const;
 
     TwoTriangleGraphCode compute_code_edge(int u, int v) const;
 
@@ -105,6 +105,8 @@ struct TwoTriangleGraph : public PrecoloredGraph {
     void set_first_triangle_as_outer_face();
 
     void set_second_triangle_as_inner_face();
+
+    bool triangles_have_same_orientation() const;
 
     //Generates toroidal 5-list graphs by identifying the two triangles in all possible ways
     std::vector<ListGraph> identify_triangles() const;

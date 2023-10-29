@@ -124,8 +124,8 @@ bool reducible_gadgets_test(const ListGraph& g) {
 bool alon_tarsi_test(const ListGraph& g) {
     static map<ListGraphCode, bool> mem;
 
-    const int ALON_TARSI_LIMIT_M = 100;
-    if (g.m > ALON_TARSI_LIMIT_M) return false;
+    
+    if (g.m > GlobalSettings::ALON_TARSI_LIMIT_M) return false;
 
     if(GlobalSettings::ALON_TARSI_MEMOIZE) {
         ListGraphCode code = g.compute_list_code();
@@ -346,17 +346,13 @@ bool batch_reducible_test(const ListGraph& g) {
     vector<std::function<bool(const ListGraph&)>> tests = {degree_test, biconnected_components_degreeassignment_test, color_and_collapse_test, reducible_gadgets_test, two_neighbors_heuristic_test, hill_climbing_two_neighbors_test, alon_tarsi_test};
 
     for (auto f : tests) {
-        if (DEBUG_VARS::DEBUG_TRACING) {
-            debug_msg("Reducible Test");
-        }
-
         if (f(g)) return true;
     }
     return false;
 }
 
 bool batch_colorable_test(const ListGraph& g) {
-    vector<std::function<bool(const ListGraph&)>> tests = {color_and_collapse_test, two_neighbors_heuristic_test, hill_climbing_two_neighbors_test, postle_test, alon_tarsi_test};
+    vector<std::function<bool(const ListGraph&)>> tests = {color_and_collapse_test, two_neighbors_heuristic_test, hill_climbing_two_neighbors_test, /*postle_test,*/ alon_tarsi_test};
 
     
 
@@ -369,10 +365,6 @@ bool batch_colorable_test(const ListGraph& g) {
     }
 
     for (auto f : tests) {
-        if (DEBUG_VARS::DEBUG_TRACING) {
-            debug_msg("Colorable Test");
-        }
-
         if (f(g)) return true;
     }
     return false;
@@ -386,10 +378,6 @@ vector<int> minimal_irreducible_deletedvertices(const ListGraph& g) {
                 debug_var(gp.list_sizes);
             }
         if(!batch_colorable_test(gp)) {
-            if (DEBUG_VARS::DEBUG_TRACING) {
-                debug_msg("Still does not pass tests");
-            }
-
             vector<int> dv = minimal_irreducible_deletedvertices(gp);
             for (int i=0; i < (int)dv.size(); ++i) {
                 if(dv[i] >= v) dv[i]++;
@@ -407,7 +395,7 @@ bool recursive_colorability_test(const ListGraph& g) {
         return false;
     }
 
-    vector<ListGraph> vcc = g.connected_components();
+    //vector<ListGraph> vcc = g.connected_components();
 
     if (!g.connected()) {
         vector<ListGraph> vcc = g.connected_components();
@@ -454,7 +442,7 @@ bool batch_test(const ListGraph& g) {
     
     if (g.empty()) return false;
 
-    if (g.nocolors()) return false; //TODO: necessary because Alon-Tarsi does not work correctly otherwise, fix?
+    if (g.nocolors()) return false; //necessary because Alon-Tarsi does not work correctly otherwise
     
 
     

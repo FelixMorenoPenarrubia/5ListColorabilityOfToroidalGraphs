@@ -1,6 +1,7 @@
 #include "Graph.hh"
 #include "debug_utility.hh"
 #include<algorithm>
+#include<set>
 
 using std::vector;
 using std::map;
@@ -78,10 +79,12 @@ vector<int> Graph::get_face_ccw(int u, int v) const {
 Graph Graph::identify_vertices(vector<int> v1,  vector<int> v2) const {
     vector<int> morph(n);
     vector<int> corrv1(n, -1);
+    vector<int> corrv2(n, -1);
     int pen = 0;
 
     for (int j=0; j < (int)v1.size(); ++j) {
         corrv1[v2[j]] = v1[j];
+        corrv2[v1[j]] = v2[j];
     }
     for (int i=0; i < n; ++i) {
         morph[i] = i-pen;
@@ -102,7 +105,7 @@ Graph Graph::identify_vertices(vector<int> v1,  vector<int> v2) const {
                 }
             }
             if (corrv1[u] != -1) {
-                if (ral[corrv1[u]].find(v) != ral[corrv1[u]].end()) {
+                if (ral[corrv1[u]].find(v) != ral[corrv1[u]].end() || (corrv2[v] != -1 && ral[corrv1[u]].find(corrv2[v]) != ral[corrv1[u]].end())) {
                     continue;
                 }
             }
@@ -169,6 +172,17 @@ void Graph::write_cpp(std::ostream& os) const {
     }
 }
 
+void Graph::write_prolog(std::ostream& os) const  {
+    os << "numVertices(" << n << ")." << std::endl;
+    for (int u=0; u < n; ++u) {
+        for (int v : al[u]) {
+            if (v > u) {
+                os << "edge(" << u << "," << v << ")." << std::endl;
+            }
+        }
+    }
+}
+
 bool Graph::connected() const {
     unsigned long long vis_bm = 1;
     vector<int> st;
@@ -184,4 +198,15 @@ bool Graph::connected() const {
         }
     }
     return vis_bm+1 == (1ULL<<n);
+}
+
+bool Graph::has_repeated_edges() const {
+    for (int u=0; u < n; ++u) {
+        std::set<int> neigh;
+        for (int j=0; j < (int)al[u].size(); ++j) {
+            if (neigh.find(al[u][j]) != neigh.end()) return true;
+            neigh.insert(al[u][j]);
+        }
+    }
+    return false;
 }

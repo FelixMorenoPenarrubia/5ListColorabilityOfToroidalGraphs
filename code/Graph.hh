@@ -34,7 +34,11 @@ struct Graph {
 
     bool subgraph_isomorphism(const Graph& g) const;
 
+    bool has_repeated_edges() const;
+
     void write_cpp(std::ostream& os) const;
+
+    void write_prolog(std::ostream& os) const;
 
 };
 

@@ -28,6 +28,7 @@ struct CanvasSearch {
     
     std::vector<CanvasList> critical_chordless;
     std::vector<CanvasList> critical_with_chords;
+    std::vector<CanvasList> critical_with_size34_chords;
 
     static bool DFS_MODE;
     static bool HALFMEMORY_MODE;
@@ -44,6 +45,10 @@ struct CanvasSearch {
     static void add_canvas(const Canvas& g, CanvasList& cl);
 
     static void add_canvas_dfs(const Canvas& g);
+
+    static void add_canvas_hash(const Canvas& g);
+
+    static void add_canvas_to_triangles(const Canvas& g);
 
     static void add_canvas_dfs_serial(const Canvas& g);
 
@@ -69,6 +74,8 @@ struct CanvasSearch {
 
     void add_smaller_chords(int l, const std::vector<CanvasList>& prev, CanvasList& curr) const;
 
+    void add_smaller_size34_chords(int l, const std::vector<CanvasList>& prev, CanvasList& curr) const;
+
     void add_smaller_tripods(int l, const std::vector<CanvasList>& prev, CanvasList& curr) const;
 
     void add_same_size_tripods(int l, CanvasList& curr) const;
@@ -86,15 +93,29 @@ struct CanvasSearch {
     
     CanvasList generate_with_chords(int l) const;
 
+    CanvasList generate_with_size34_chords(int l) const;
+
     vector<Canvas> get_chordless(int l);
 
     vector<Canvas> get_with_chords(int l);
 
+    std::set<CanvasCode>& get_with_size34_chords(int l);
+
     std::set<CanvasCode>& get_chordless_code(int l);
+
+    std::set<CanvasCode>& get_chordful_code(int l);
 
     void print_chordless_lessmemory(int l);
 
     void read_previous_and_print_lessmemory();
+
+    void read_previous_and_print_w34c(int l);
+
+    void read_previous_and_print_w34c_parallel(int l);
+
+    void read_previous_and_print_w34c_triangles_parallel(int l);
+
+    static void process_canvas_chords(const vector<CanvasCode> va, const vector<CanvasCode> vb);
 
 };
 
