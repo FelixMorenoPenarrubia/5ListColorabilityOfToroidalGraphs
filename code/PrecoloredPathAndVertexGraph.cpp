@@ -91,8 +91,6 @@ PrecoloredPathAndVertexGraph::PrecoloredPathAndVertexGraph() {
 PrecoloredPathAndVertexGraph::PrecoloredPathAndVertexGraph(vector<vector<int>> _al, vector<int> _list_sizes) {
     n = _al.size();
 
-    debug_assert(n >= 4);
-
     list_sizes = _list_sizes;
     m = 0;
     al = _al;
@@ -263,8 +261,6 @@ vector<vector<int>> PrecoloredPathAndVertexGraph::get_paths() const {
 
     if (ral[pu].at(pv) != 0) std::swap(pu, pv);
 
-    debug_assert(ral[pu].at(pv) == 0);
-
     return {{pu, pv}, {pu2}};
 }
 
@@ -276,8 +272,6 @@ PrecoloredPathAndVertexGraph::PrecoloredPathAndVertexGraph(const PrecoloredPathA
     for (int i = 0; i < code.size(); ++i) {
         if (code[i] < 0) n++;
     }
-
-    debug_assert(n >= 3);
 
     al = vector<vector<int>>(n);
     list_sizes = vector<int>(n);
@@ -421,6 +415,5 @@ bool PrecoloredPathAndVertexGraph::test_no_l3_adjacent() const  {
 
 bool PrecoloredPathAndVertexGraph::test_criticality() const {
     if (n == 3) return true;
-    //if (!test_no_l3_adjacent()) return false;
     return !batch_test(compute_list_graph());
 }

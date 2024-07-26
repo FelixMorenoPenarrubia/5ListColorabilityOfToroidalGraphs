@@ -45,9 +45,6 @@ struct TwoTriangleGraph : public PrecoloredGraph {
 
     Canvas original_canvas;
 
-
-    // FUNCTIONS
-
     void init_inherited_values();
 
     TwoTriangleGraph();

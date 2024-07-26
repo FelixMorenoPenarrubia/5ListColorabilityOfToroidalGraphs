@@ -285,7 +285,6 @@ void CanvasSearch::add_canvas_dfs_parallel_2(const Canvas& g) {
 
 void CanvasSearch::add_canvas_dfs(const Canvas& g) {
     #ifdef PARALLEL
-    //add_canvas_dfs_parallel(g);
     Parallelism::spawn_thread([g] () {add_canvas_dfs_parallel_2(g);});
     #else
     add_canvas_dfs_serial(g);
@@ -299,7 +298,6 @@ void CanvasSearch::add_canvas(const Canvas& g, CanvasList& cl) {
     }
     else {
         #ifdef PARALLEL
-        //Parallelism::thread_queue.push(std::thread(add_canvas_real, g, std::ref(cl)));
         Parallelism::spawn_thread_addcanvas(g, cl);
         #else
         add_canvas_real(g, cl);
@@ -310,7 +308,6 @@ void CanvasSearch::add_canvas(const Canvas& g, CanvasList& cl) {
 
 void CanvasSearch::add_canvas_q(const Canvas& g, std::queue<CanvasCode>& q) {
     #ifdef PARALLEL
-    //Parallelism::thread_queue.push(std::thread(add_canvas_q_real, g, std::ref(cl), std::ref(q)));
     Parallelism::spawn_thread_addcanvas_q(g, q);
     #else
     add_canvas_q_real(g, q);
@@ -319,7 +316,6 @@ void CanvasSearch::add_canvas_q(const Canvas& g, std::queue<CanvasCode>& q) {
 
 void CanvasSearch::add_canvas_q_and_cl(const Canvas& g, CanvasList& cl, std::queue<CanvasCode>& q) {
     #ifdef PARALLEL
-    //Parallelism::thread_queue.push(std::thread(add_canvas_q_real, g, std::ref(cl), std::ref(q)));
     Parallelism::spawn_thread_addcanvas_q_and_cl(g, cl, q);
     #else
     add_canvas_q_and_cl_real(g, cl, q);
@@ -589,10 +585,6 @@ void CanvasSearch::process_canvas_chords(const vector<CanvasCode> va, const vect
                 for(int j2=0; j2 < b; ++j2) {
                     Canvas ng1 = Canvas::fuse_chord(g1, g2, j1, j2, false);
                     Canvas ng2 = Canvas::fuse_chord(g1, g2, j1, j2, true);
-                    /*
-                    add_canvas_hash(ng1);
-                    add_canvas_hash(ng2);
-                    */
                     add_canvas_to_triangles(ng1);
                     add_canvas_to_triangles(ng2);
                 }

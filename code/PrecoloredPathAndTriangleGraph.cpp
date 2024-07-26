@@ -92,8 +92,6 @@ PrecoloredPathAndTriangleGraph::PrecoloredPathAndTriangleGraph() {
 PrecoloredPathAndTriangleGraph::PrecoloredPathAndTriangleGraph(vector<vector<int>> _al, vector<int> _list_sizes) {
     n = _al.size();
 
-    debug_assert(n >= 5);
-
     list_sizes = _list_sizes;
     m = 0;
     al = _al;
@@ -124,9 +122,7 @@ void PrecoloredPathAndTriangleGraph::generate_path_and_triangle() {
     }
 
     //Path with outer face orientation
-    debug_assert((int)path.size() == 2);
     if(al[path[0]][0] != path[1]) std::swap(path[0], path[1]);
-    debug_assert(al[path[0]][0] == path[1]);
 
     for (int u=0; u < n; ++u) {
         if (precolored[u] && u != path[0] && u != path[1]) {
@@ -185,7 +181,6 @@ PrecoloredPathAndTriangleGraph PrecoloredPathAndTriangleGraph::read_code(std::is
 
 
 vector<PrecoloredPathAndTriangleGraph> PrecoloredPathAndTriangleGraph::fuse_canvas_and_path_triangle_in_path(const Canvas& c, const PrecoloredPathGraph& p) {
-    debug_assert(p.l == 7);
     vector<PrecoloredPathAndTriangleGraph> ans;
     for (int i=0; i < c.l; ++i) {
         for (int dj=std::max(2, c.l-2-6); dj <= std::min(4, c.l-6); ++dj) {
@@ -217,7 +212,6 @@ vector<PrecoloredPathAndTriangleGraph> PrecoloredPathAndTriangleGraph::fuse_canv
 }
 
 vector<PrecoloredPathAndTriangleGraph> PrecoloredPathAndTriangleGraph::fuse_canvas_and_path_triangle_in_canvas(const Canvas& c, const PrecoloredPathGraph& p) {
-    debug_assert(p.l == 6);
     vector<PrecoloredPathAndTriangleGraph> ans;
     for (int i=0; i < c.l; ++i) {
         for (int dj=std::max(2, c.l-2-7); dj <= std::min(4, c.l-7); ++dj) {
@@ -259,8 +253,6 @@ vector<CanvasWithIndices> PrecoloredPathAndTriangleGraph::critical_canvases_with
         edge_codes.insert(c.compute_code_edge(i, (i+1)%c.l));
         for (int dj=std::max(2, c.l-2-6); dj <= std::min(4, c.l-6); ++dj) {
             ListGraph g = ListGraph(c.al, c.list_sizes);
-            //g.list_sizes[(i+dj+1)%c.l] = 5;
-            //g.list_sizes[(i+dj+4)%c.l] = 5;
             vector<int> variable_list_size_vertices;
             for (int k=2; k < dj; ++k) {
                 variable_list_size_vertices.push_back((i+k)%c.l);
@@ -279,7 +271,6 @@ vector<CanvasWithIndices> PrecoloredPathAndTriangleGraph::critical_canvases_with
                 }
                 if (!batch_reducible_test(g)) {
                     CanvasWithIndices cwi;
-                    //cwi.c = c;
                     cwi.i = i;
                     cwi.dj = dj;
                     cwi.mask = mask;
@@ -301,8 +292,6 @@ vector<CanvasWithIndices> PrecoloredPathAndTriangleGraph::critical_canvases_with
         edge_codes.insert(c.compute_code_edge(i, (i+1)%c.l));
         for (int dj=std::max(2, c.l-2-7); dj <= std::min(4, c.l-7); ++dj) {
             ListGraph g = ListGraph(c.al, c.list_sizes);
-            //g.list_sizes[(i+dj+1)%c.l] = 5;
-            //g.list_sizes[(i+dj+5)%c.l] = 5;
             vector<int> variable_list_size_vertices;
             for (int k=2; k < dj; ++k) {
                 variable_list_size_vertices.push_back((i+k)%c.l);
@@ -321,7 +310,6 @@ vector<CanvasWithIndices> PrecoloredPathAndTriangleGraph::critical_canvases_with
                 }
                 if (!batch_reducible_test(g)) {
                     CanvasWithIndices cwi;
-                    //cwi.c = c;
                     cwi.i = i;
                     cwi.dj = dj;
                     cwi.mask = mask;
@@ -335,7 +323,6 @@ vector<CanvasWithIndices> PrecoloredPathAndTriangleGraph::critical_canvases_with
 }
 
 vector<PrecoloredPathAndTriangleGraph> PrecoloredPathAndTriangleGraph::fuse_canvas_with_indices_and_path_triangle_in_path(const Canvas& c,const CanvasWithIndices& cwi, const PrecoloredPathGraph& p) {
-    debug_assert(p.l == 7);
     int i = cwi.i;
     int dj = cwi.dj;
     int mask = cwi.mask;
@@ -379,7 +366,6 @@ vector<PrecoloredPathAndTriangleGraph> PrecoloredPathAndTriangleGraph::fuse_canv
 }
 
 vector<PrecoloredPathAndTriangleGraph> PrecoloredPathAndTriangleGraph::fuse_canvas_with_indices_and_path_triangle_in_canvas(const Canvas& c, const CanvasWithIndices& cwi, const PrecoloredPathGraph& p) {
-    debug_assert(p.l == 6);
     int i = cwi.i;
     int dj = cwi.dj;
     int mask = cwi.mask;
@@ -556,8 +542,6 @@ PrecoloredPathAndTriangleGraph::PrecoloredPathAndTriangleGraph(const PrecoloredP
         if (code[i] < 0) n++;
     }
 
-    debug_assert(n >= 5);
-
     al = vector<vector<int>>(n);
     list_sizes = vector<int>(n);
     list_sizes[0] = 1;
@@ -687,7 +671,6 @@ int PrecoloredPathAndTriangleGraph::count_l3_adjacent_pairs() const  {
 
 bool PrecoloredPathAndTriangleGraph::test_criticality() const {
     if (n == 5) return true;
-    //if (!test_no_l3_adjacent()) return false;
     return !batch_test(compute_list_graph());
 }
 

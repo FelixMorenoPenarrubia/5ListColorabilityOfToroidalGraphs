@@ -60,8 +60,6 @@ void Graph::set_outer_face(vector<int> of) {
 }
 
 vector<int> Graph::get_face_ccw(int u, int v) const {
-    debug_assert(neighbors(u, v));
-
     vector<int> ans;
     ans.push_back(u);
     int nxt = v;
@@ -121,10 +119,6 @@ bool Graph::subgraph_isomorphism(const Graph& h) const {
     vector<int> used(n, 0); // which vertices are used
     int cv = 0; //current vertex of h that we are mapping
 
-    // test three properties:
-    // 1. vertex not already used
-    //
-    // 3. neighbors from previously selected vertices
     auto test_vertex = [&] () -> bool {
         if (used[f[cv]]) return false;
 

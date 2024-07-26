@@ -41,9 +41,6 @@ struct PrecoloredPathGraph : public PrecoloredGraph {
 
     int l;
 
-
-    // FUNCTIONS
-
     void init_inherited_values();
 
     PrecoloredPathGraph();

@@ -189,7 +189,6 @@ TwoTriangleGraph::TwoTriangleGraph(const TwoTriangleGraphCode& code) {
     int cn = 0;
     vector<int> cv_stack;
     cv_stack.push_back(0);
-    //vector<int> zero_neigh;
     vector<vector<int>> prelim_triangles(2);
     prelim_triangles[0].push_back(0);
     for (int i = 0; i < code.size(); ++i) {
@@ -210,13 +209,8 @@ TwoTriangleGraph::TwoTriangleGraph(const TwoTriangleGraphCode& code) {
         }
         else {
             al[cv_stack.back()].push_back(code[i]);
-            /*if (code[i] == 0) {
-                zero_neigh.push_back(cv_stack.back());
-            }*/
         }
     }
-    //std::reverse(zero_neigh.begin(), zero_neigh.end());
-    //for (int x : zero_neigh) al[0].push_back(x);
 
     
 
@@ -224,11 +218,9 @@ TwoTriangleGraph::TwoTriangleGraph(const TwoTriangleGraphCode& code) {
     set_list_sizes();
 
     if ((int)prelim_triangles[0].size() == 3) {
-        //new code
         triangles = prelim_triangles;
     }
     else {
-        //old code
         vector<int> pcv;
         for (int u = 0; u < n; ++u) {
             if(precolored[u]) pcv.push_back(u);
@@ -360,7 +352,6 @@ TwoTriangleGraphCode TwoTriangleGraph::compute_code_edge(int u, int v) const {
     TwoTriangleGraphCode code = TwoTriangleGraphCode();
     vector<int> assigned_numbers (n, -1);
     assigned_numbers[u] = 0;
-    //code.push_f(1);
     int c = 1;
     int rt = 0;
     for (int i=0; i < 3; ++i) {
@@ -372,7 +363,6 @@ TwoTriangleGraphCode TwoTriangleGraph::compute_code_edge(int u, int v) const {
         int w = al[u][(i+idx)%als];
         dfs_code(w, ral[w].at(u), c, rt, assigned_numbers, code);
     }
-    //code.push_b();
     return code;
 }
 
@@ -478,22 +468,12 @@ bool TwoTriangleGraph::test_criticality() const {
 
 vector<TwoTriangleGraph> TwoTriangleGraph::fuse_triangles(TwoTriangleGraph g1, TwoTriangleGraph g2) {
     vector<TwoTriangleGraph> ans;
-    //for(int t_idx_1=0; t_idx_1 <= 1; ++t_idx_1) {
-        for (int t_idx_2=0; t_idx_2 <= 1; ++t_idx_2) {
-           // for (int t_ord_1=0; t_ord_1 < 3; ++t_ord_1) {
-                for (int t_ord_2=0; t_ord_2 < 3; ++t_ord_2) {
-                    //g1.set_outer_face(g1.triangles[t_idx_1]);
-                    //g2.set_outer_face(g2.triangles[t_idx_2]);
-
-                    ans.push_back(fuse_triangles_fixed(g1, g2));
-                    //ans.push_back(fuse_triangles_fixed(g2, g1));
-
-                    g2.triangles[t_idx_2] = {g2.triangles[t_idx_2][1], g2.triangles[t_idx_2][2], g2.triangles[t_idx_2][0]};
-                }
-            //    g1.triangles[t_idx_1] = {g1.triangles[t_idx_1][1], g1.triangles[t_idx_1][2], g1.triangles[t_idx_1][0]};
-            //}
+    for (int t_idx_2=0; t_idx_2 <= 1; ++t_idx_2) {
+        for (int t_ord_2=0; t_ord_2 < 3; ++t_ord_2) {
+            ans.push_back(fuse_triangles_fixed(g1, g2));
+            g2.triangles[t_idx_2] = {g2.triangles[t_idx_2][1], g2.triangles[t_idx_2][2], g2.triangles[t_idx_2][0]};
         }
-   // }
+    }
     return ans;
 }
 
@@ -587,7 +567,6 @@ void TwoTriangleGraph::set_first_triangle_as_outer_face()  {
         generate_ral_and_m();
     }
     for (int i=0; i < 3; ++i) {
-        debug_assert((ral[triangles[0][i]][triangles[0][(i+1)%3]]+1)%((int)al[triangles[0][i]].size()) == ral[triangles[0][i]][triangles[0][(i+2)%3]]);
         int s = (int)al[triangles[0][i]].size();
         int u = triangles[0][i];
         int stj = ral[u][triangles[0][(i+2)%3]];

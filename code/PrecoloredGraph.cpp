@@ -14,8 +14,6 @@ ListGraph PrecoloredGraph::compute_list_graph() const {
         }
     }
 
-    //debug_var(nn);
-
     vector<int> nls (nn);
     vector<vector<int>> nal (nn);
 

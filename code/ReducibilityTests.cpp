@@ -20,15 +20,11 @@ bool degree_test(const ListGraph& g) {
 
 bool biconnected_components_degreeassignment_test(const ListGraph& g) {
 
-    //debug_msg("Biconnected components test");
 
     vector<DFSGraph> comp = DFSGraph(g.degree_assignment_subgraph()).partition_biconnected();
 
-    //debug_var(comp.size());
 
     for (DFSGraph df : comp) {
-        //debug_var(df.n);
-        //debug_var(df.al);
         if (!(df.is_odd_cycle() || df.is_clique())) return true;
     }
     return false;
@@ -313,35 +309,6 @@ bool hill_climbing_two_neighbors_test(const ListGraph& g) {
     return hill_climbing_two_neighbors_test(best_graph);
 }
 
-bool postle_test(const ListGraph& g) {
-    int cnt_2 = 0;
-    int cnt_3 = 0;
-    int st = 0;
-    for (int u=0; u < g.n; ++u) {
-        if (g.list_sizes[u] < 2) return false;
-        else if (g.list_sizes[u] == 2) {
-            cnt_2++;
-            st = u;
-        }
-        else if (g.list_sizes[u] == 3) cnt_3++;
-    }
-    if (cnt_2 > 2) return false;
-    for (int v : g.al[st]) {
-        if (g.list_sizes[v] > 3) continue;
-        vector<int> f = g.get_face_ccw(st, v);
-        if (f.empty()) continue;
-        int ncnt_2 = 0;
-        int ncnt_3 = 0;
-        for (int u : f) {
-            if (g.list_sizes[u] == 2) ncnt_2++;
-            else if (g.list_sizes[u] == 3) ncnt_3++;
-        }
-        if (ncnt_2 == cnt_2 && ncnt_3 == cnt_3) return true;
-    }
-    return false;
-
-}
-
 bool batch_reducible_test(const ListGraph& g) {
     vector<std::function<bool(const ListGraph&)>> tests = {degree_test, biconnected_components_degreeassignment_test, color_and_collapse_test, reducible_gadgets_test, two_neighbors_heuristic_test, hill_climbing_two_neighbors_test, alon_tarsi_test};
 
@@ -352,7 +319,7 @@ bool batch_reducible_test(const ListGraph& g) {
 }
 
 bool batch_colorable_test(const ListGraph& g) {
-    vector<std::function<bool(const ListGraph&)>> tests = {color_and_collapse_test, two_neighbors_heuristic_test, hill_climbing_two_neighbors_test, /*postle_test,*/ alon_tarsi_test};
+    vector<std::function<bool(const ListGraph&)>> tests = {color_and_collapse_test, two_neighbors_heuristic_test, hill_climbing_two_neighbors_test, alon_tarsi_test};
 
     
 
@@ -373,10 +340,6 @@ bool batch_colorable_test(const ListGraph& g) {
 vector<int> minimal_irreducible_deletedvertices(const ListGraph& g) {
     for (int v = 0; v < g.n; ++v) {
         ListGraph gp = g.remove_vertex(v);
-        if (DEBUG_VARS::DEBUG_TRACING) {
-                debug_var(gp.al);
-                debug_var(gp.list_sizes);
-            }
         if(!batch_colorable_test(gp)) {
             vector<int> dv = minimal_irreducible_deletedvertices(gp);
             for (int i=0; i < (int)dv.size(); ++i) {
@@ -442,7 +405,7 @@ bool batch_test(const ListGraph& g) {
     
     if (g.empty()) return false;
 
-    if (g.nocolors()) return false; //necessary because Alon-Tarsi does not work correctly otherwise
+    if (g.nocolors()) return false;
     
 
     

@@ -152,7 +152,6 @@ ListGraph ListGraph::precolor_vertex_smart(int w, int wp) const {
 }
 
 ListGraph ListGraph::precolor_vertices_smart_twoneighbors(int wp, int w1, int w2) const {
-    debug_assert(neighbors(wp, w1) && neighbors(wp, w2) && !neighbors(w1, w2));
     if (w1 > w2) std::swap(w1, w2);
     vector<int> morph(n);
     for (int u = 0; u < w1; ++u) {

@@ -91,8 +91,6 @@ TwoPrecoloredPathsGraph::TwoPrecoloredPathsGraph() {
 TwoPrecoloredPathsGraph::TwoPrecoloredPathsGraph(vector<vector<int>> _al, vector<int> _list_sizes) {
     n = _al.size();
 
-    debug_assert(n >= 4);
-
     list_sizes = _list_sizes;
     m = 0;
     al = _al;
@@ -183,7 +181,6 @@ TwoPrecoloredPathsGraph TwoPrecoloredPathsGraph::read_code(std::istream& is) {
 
 
 vector<TwoPrecoloredPathsGraph> TwoPrecoloredPathsGraph::fuse_precoloredpaths_sameside(const PrecoloredPathGraph& g1, const PrecoloredPathGraph& g2) {
-    debug_assert(g1.l == g2.l+2);
     vector<vector<int>> nal (g1.n + g2.n - g2.l);
     vector<int> nlistsizes(g1.n + g2.n - g2.l);
     vector<int> morph1(g1.n);
@@ -254,17 +251,10 @@ vector<TwoPrecoloredPathsGraph> TwoPrecoloredPathsGraph::fuse_precoloredpaths_sa
 
     for (auto& g : ans) g.set_outer_face(outer_face);
 
-    /*
-    for (int i=2; i < g2.l; ++i) {
-        nlistsizes[i] = 5;
-    }
-    */
-
     return ans;
 }
 
 vector<TwoPrecoloredPathsGraph> TwoPrecoloredPathsGraph::fuse_precoloredpaths_oppositeside(const PrecoloredPathGraph& g1, const PrecoloredPathGraph& g2) {
-    debug_assert(g1.l == g2.l);
     vector<vector<int>> nal (g1.n + g2.n - g1.l +1);
     vector<int> nlistsizes(g1.n + g2.n - g1.l +1);
     vector<int> morph1(g1.n);
@@ -336,11 +326,6 @@ vector<TwoPrecoloredPathsGraph> TwoPrecoloredPathsGraph::fuse_precoloredpaths_op
     }
 
     for (auto& g : ans) g.set_outer_face(outer_face);
-    /*
-    for (int i=2; i+1 < g1.l; ++i) {
-        nlistsizes[i] = 5;
-    }
-    */
 
     return ans;
 }
@@ -452,9 +437,6 @@ vector<vector<int>> TwoPrecoloredPathsGraph::get_paths() const {
     if (ral[pu].at(pv) != 0) std::swap(pu, pv);
     if (ral[pu2].at(pv2) != 0) std::swap(pu2, pv2);
 
-    debug_assert(ral[pu].at(pv) == 0);
-    debug_assert(ral[pu2].at(pv2) == 0);
-
     return {{pu, pv}, {pu2, pv2}};
 }
 
@@ -466,8 +448,6 @@ TwoPrecoloredPathsGraph::TwoPrecoloredPathsGraph(const TwoPrecoloredPathsGraphCo
     for (int i = 0; i < code.size(); ++i) {
         if (code[i] < 0) n++;
     }
-
-    debug_assert(n >= 4);
 
     al = vector<vector<int>>(n);
     list_sizes = vector<int>(n);
@@ -545,7 +525,6 @@ TwoPrecoloredPathsGraphCode TwoPrecoloredPathsGraph::compute_code() const {
     return code;
 }
 
-//TODO:  make this function use get_paths
 int TwoPrecoloredPathsGraph::distance_between_paths() const {
     int pu, pv;
     pu = -1;

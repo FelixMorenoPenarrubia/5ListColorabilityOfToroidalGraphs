@@ -314,13 +314,10 @@ CanvasCode Canvas::compute_code_edge(int u, int v) const {
     return code;
 }
 
-//Note: may give different codes for isomorphic graphs if the outer orientation is reversed 
 CanvasCode Canvas::compute_code() const {
     if (memoized_code.size() != 0) return memoized_code;
-    //CanvasCode code = std::min(compute_code_edge(0, 1), compute_code_edge(1, 0));
     CanvasCode code = compute_code_edge(0, 1);
     for (int u = 1; u < l; ++u) {
-        //code = std::min(code, std::min(compute_code_edge(u, (u+1)%l), compute_code_edge((u+1)%l, u)));
         code = std::min(code, compute_code_edge(u, (u+1)%l));
     }
     return  code;

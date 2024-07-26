@@ -45,9 +45,6 @@ void TwoPrecoloredPathsGraphSearch::add_same_side(int d, std::set<TwoPrecoloredP
         PrecoloredPathGraph g1 = PrecoloredPathGraph(c1);
         for (PrecoloredPathGraphCode c2 : v2) {
             PrecoloredPathGraph g2 = PrecoloredPathGraph(c2);
-            /*if (c1.to_string() == "F1F1F1F1F1RcRdBBRfBRfF3RaRbBBRgB" && c2.to_string() == "F1F1F1F3F4F3RaRbBRbRcBRcBBReRfBRfRgB") {
-                debug_msg("hello world");
-            }*/
             add_graphs(TwoPrecoloredPathsGraph::fuse_precoloredpaths_sameside(g1, g2), gl, d);
             add_graphs(TwoPrecoloredPathsGraph::fuse_precoloredpaths_sameside(g1, g2.reverse()), gl, d);
         }
@@ -60,9 +57,6 @@ void TwoPrecoloredPathsGraphSearch::add_opposite_side(int d, std::set<TwoPrecolo
         PrecoloredPathGraph g1 = PrecoloredPathGraph(c1);
         for (PrecoloredPathGraphCode c2 : v) {
             PrecoloredPathGraph g2 = PrecoloredPathGraph(c2);
-           /* if (c1.to_string() == "F1F1F1F3F4F3RaF5RaRbRcRfBBRhRcBRcBBReRfRhBRhB" && c2.to_string() == "F1F1F1BF3RaRbBBReB") {
-                debug_msg("hello world");
-            }*/
             add_graphs(TwoPrecoloredPathsGraph::fuse_precoloredpaths_oppositeside(g1, g2), gl, d);
             add_graphs(TwoPrecoloredPathsGraph::fuse_precoloredpaths_oppositeside(g1, g2.reverse()), gl, d);
         }

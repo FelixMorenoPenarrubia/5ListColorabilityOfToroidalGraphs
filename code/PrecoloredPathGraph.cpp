@@ -518,7 +518,6 @@ PrecoloredPathGraphCode PrecoloredPathGraph::compute_code() const {
 }
 
 bool PrecoloredPathGraph::is_interior_path_vertex_articulation_point(int u) const {
-    debug_assert(1 <= u && u <= l-2);
     return remove_vertex(u).connected_components().size() != 1;
 }
 
@@ -535,13 +534,10 @@ bool PrecoloredPathGraph::test_no_l3_adjacent() const  {
 
 bool PrecoloredPathGraph::test_criticality() const {
     if (n == l) return true;
-    //if (!test_no_l3_adjacent()) return false;
     return !batch_test(compute_list_graph());
 }
 
 int PrecoloredPathGraph::fan_length_in_endpoints() const {
-    debug_assert(l >= 3);
-
     int len1 = 0;
     int li1 = al[1].size()-2;
     while(li1 >= 0 && neighbors(al[1][li1], al[1][li1+1]) && list_sizes[al[1][li1]] == 3) {
@@ -598,8 +594,6 @@ int PrecoloredPathGraph::fan_length_in_path() const {
 }
 
 bool PrecoloredPathGraph::has_bellows_in_endpoints() const {
-    debug_assert(l >= 3);
-    
     int als1 = al[1].size();
     int last_out = al[0].back();
     if (list_sizes[last_out] > 1 && als1 >= 3 && list_sizes[al[1][als1-2]] == 5 && list_sizes[al[1][als1-3]] == 3 && last_out-al[1][als1-3] >= 2) {
@@ -632,9 +626,6 @@ bool PrecoloredPathGraph::has_large_fans_or_bellows() const {
 }
 
 PrecoloredPathGraph PrecoloredPathGraph::largest_left_endpoint_cut() const {
-    debug_assert(l >= 3);
-
-
     int idx = -1;
 
     for (int i=0; i < (int)al[1].size(); ++i) {
@@ -691,9 +682,6 @@ PrecoloredPathGraph PrecoloredPathGraph::largest_left_endpoint_cut() const {
 }
 
 PrecoloredPathGraph PrecoloredPathGraph::largest_right_endpoint_cut() const {
-    debug_assert(l >= 3);
-
-
     int idx = -1;
 
     for (int i=(int)al[l-2].size()-1; i > -1; --i) {
@@ -751,9 +739,6 @@ PrecoloredPathGraph PrecoloredPathGraph::largest_right_endpoint_cut() const {
 }
 
 std::pair<PrecoloredPathGraph, PrecoloredPathGraph> PrecoloredPathGraph::largest_cuts(int u) const {
-    debug_assert(l >= 3);
-
-
     int idx_l = -1;
     int idx_r = -1;
 
@@ -864,7 +849,6 @@ std::pair<PrecoloredPathGraph, PrecoloredPathGraph> PrecoloredPathGraph::largest
 }
 
 vector<PrecoloredPathGraph> PrecoloredPathGraph::fuse_canvas(const Canvas& c) const {
-    debug_assert(c.l == 2*l);
     vector<PrecoloredPathGraph> ans;
     for (int st=0; st < l; ++st) {
         vector<int> morph_c(c.n);

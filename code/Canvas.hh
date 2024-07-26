@@ -43,9 +43,6 @@ struct Canvas : public PrecoloredGraph {
 
     CanvasCode memoized_code;
 
-
-    // FUNCTIONS
-
     void init_inherited_values();
 
     Canvas();

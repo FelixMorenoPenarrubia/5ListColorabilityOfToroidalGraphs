@@ -14,27 +14,16 @@ RestrictedPrecoloredPathGraphSearch::RestrictedPrecoloredPathGraphSearch() {
     critical_all[3].insert(PrecoloredPathGraph({{1, 2}, {2, 0}, {0, 1}}, 3, {1, 1, 1}).compute_code());
     critical_all[3].insert(PrecoloredPathGraph({{1, 3}, {2, 3, 0}, {3, 1}, {0, 1, 2}}, 3, {1, 1, 1, 3}).compute_code());
     critical_all[3].insert(PrecoloredPathGraph({{1, 4}, {2, 3, 4, 0}, {3, 1}, {4, 1, 2}, {0, 1, 3}}, 3, {1, 1, 1, 3, 3}).compute_code());
-    //Not sure if necessary
-   // critical_all[3].insert(PrecoloredPathGraph({{1, 5, 4}, {2, 5, 0}, {3, 5, 1}, {4, 5, 2}, {0, 5, 3}, {0, 1, 2, 3, 4}}, 3, {1, 1, 1, 3, 3, 5}).compute_code());
+    
     critical_biconnected = vector<GraphList>(4);
     critical_biconnected[2].insert(PrecoloredPathGraph({{1}, {0}}, 2, {1, 1}).compute_code());
     critical_biconnected[3].insert(PrecoloredPathGraph({{1, 2}, {2, 0}, {0, 1}}, 3, {1, 1, 1}).compute_code());
     critical_biconnected[3].insert(PrecoloredPathGraph({{1, 3}, {2, 3, 0}, {3, 1}, {0, 1, 2}}, 3, {1, 1, 1, 3}).compute_code());
     critical_biconnected[3].insert(PrecoloredPathGraph({{1, 4}, {2, 3, 4, 0}, {3, 1}, {4, 1, 2}, {0, 1, 3}}, 3, {1, 1, 1, 3, 3}).compute_code());
-    //Not sure if necessary
-    //critical_biconnected[3].insert(PrecoloredPathGraph({{1, 5, 4}, {2, 5, 0}, {3, 5, 1}, {4, 5, 2}, {0, 5, 3}, {0, 1, 2, 3, 4}}, 3, {1, 1, 1, 3, 3, 5}).compute_code());
 }
 
 bool RestrictedPrecoloredPathGraphSearch::allowed_wedge(const PrecoloredPathGraph& g) const {
     if (g.n == 0) return true;
-    /*
-    std::set<PrecoloredPathGraphCode> allowed;
-    allowed.insert(PrecoloredPathGraph({{1}, {0}}, 2, {1, 1}).compute_code());
-    allowed.insert(PrecoloredPathGraph({{1, 2}, {2, 0}, {0, 1}}, 3, {1, 1, 1}).compute_code());
-    allowed.insert(PrecoloredPathGraph({{1, 3}, {2, 3, 0}, {3, 1}, {0, 1, 2}}, 3, {1, 1, 1, 3}).compute_code());
-    allowed.insert(PrecoloredPathGraph({{1, 4}, {2, 3, 4, 0}, {3, 1}, {4, 1, 2}, {0, 1, 3}}, 3, {1, 1, 1, 3, 3}).compute_code());
-    return allowed.find(g.compute_code()) != allowed.end();
-    */
    return critical_biconnected[g.l].find(g.compute_code()) != critical_biconnected[g.l].end();
 }
 
@@ -43,7 +32,6 @@ bool RestrictedPrecoloredPathGraphSearch::test_graph(const PrecoloredPathGraph& 
     PrecoloredPathGraph g = PrecoloredPathGraph(g_un.compute_code());
      
     if (g.has_large_fans_or_bellows()) return false;
-    //if (g.has_bellows_in_endpoints()) return false;
 
     if (!allowed_wedge(g.largest_cuts(1).first) || !allowed_wedge(g.largest_cuts(g.l-2).second)) return false;
 
@@ -162,8 +150,6 @@ void RestrictedPrecoloredPathGraphSearch::add_same_size_tripods_and_chords(int l
         q.push(p);
     }
     while(!q.empty()) {
-        //if (curr.size() > 100000) return;
-
 		PrecoloredPathGraph g = PrecoloredPathGraph(q.front());
 		q.pop();
 		for(int j=1; j < l-1; ++j) { //for each inner vertex of the path, add size 3 tripod
