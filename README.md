@@ -31,9 +31,10 @@ Program `triangle_identification_torus` reads a list of critical prism-canvases 
 
 In the case of multithreaded programs, canvases are printed in a non-deterministic order. Program `sort_codes` reads a list of canvases and prints it lexicographically sorted and appending the number of canvases to the beginning of the file. 
 
-Cycle-canvases and prism-canvases are printed in a compact, machine-readable "standard form". Program `unpack_canvases` reads a list of cycle-canvases in that (with the total number of canvases at the beginning) and prints a more human-readable adjacency list format. Program `unpack_twotrianglegraphs` does the same for prism-canvases. 
+Cycle-canvases and prism-canvases are printed in a compact, machine-readable "standard form". Program `unpack_canvases` reads a list of cycle-canvases in that (with the total number of canvases at the beginning) and prints a more human-readable adjacency list format. The format begins with a line with three integers: the number of vertices, the number of edges and the circumference of the cycle-canvas. Then follows the list of edges, each edge appearing two times (corresponding to each of its endpoints) and ordered within each vertex by the rotation map order. 
 
- 
+Program `unpack_twotrianglegraphs` does the same for prism-canvases. The format begins with three integers: the number of vertices, the number of edges and the distance between the two precolored triangles. Then follows a line with 6 integers, the labels of the vertices of the precolored triangles. Then follows the list of edges. 
+
 
 ## Acknowledgements
 
