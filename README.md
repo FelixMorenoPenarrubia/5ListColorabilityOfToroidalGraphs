@@ -22,6 +22,10 @@ Program `canvas_to_triangles` (`canvas_to_triangles_parallel`) reads a list of c
 
 Program `triangle_fusion_verifier` (`triangle_fusion_verifier_parallel`) reads a list of critical prism-canvases and prints the critical prism-canvases obtained by gluing two prism-canvases of the list that do not belong to the list themselves. 
 
+### Checking Separating Triangles
+
+Program `check_separating_triangle` reads a list of prism-canvases and prints those without a separating triangle. 
+
 ### Critical Graphs on the Torus
 
 Program `triangle_identification_torus` reads a list of critical prism-canvases and checks if any of the 6-list-critical graphs on the torus obtained by identifying the two triangles does not contain any of Thomassen's obstructions.
@@ -29,7 +33,7 @@ Program `triangle_identification_torus` reads a list of critical prism-canvases 
 
 ### Canvas Format
 
-Cycle-canvases and prism-canvases are printed in a compact, machine-readable "standard form". Program `unpack_canvases` reads a list of cycle-canvases in that and prints a more human-readable adjacency list format. The format begins with a line with three integers: the number of vertices, the number of edges and the circumference of the cycle-canvas. Then follows the list of edges, each edge appearing two times (corresponding to each of its endpoints) and ordered within each vertex by the rotation map order. 
+Cycle-canvases and prism-canvases are read and printed in a compact, machine-readable "standard form". Program `unpack_canvases` reads a list of cycle-canvases in that and prints a more human-readable adjacency list format. The format begins with a line with three integers: the number of vertices, the number of edges and the circumference of the cycle-canvas. Then follows the list of edges, each edge appearing two times (corresponding to each of its endpoints) and ordered within each vertex by the rotation map order. 
 
 Program `unpack_twotrianglegraphs` does the same for prism-canvases. The format begins with three integers: the number of vertices, the number of edges and the distance between the two precolored triangles. Then follows a line with 6 integers, the labels of the vertices of the precolored triangles. Then follows the list of edges. 
 
