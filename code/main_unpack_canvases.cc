@@ -12,13 +12,9 @@ using std::vector;
 using std::string;
 
 int main() {
-    int T;
-    cin >> T;
-    cout << T << endl;
-    for (int t=0; t < T; ++t) {
-        string s;
-        cin >> s;
-        Canvas(CanvasCode(s)).write(cout);
+    string str;
+    while (cin >> str) {
+        Canvas(CanvasCode(str)).write(cout);
     }
 
     

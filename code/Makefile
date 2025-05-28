@@ -36,9 +36,6 @@ unpack_canvases: main_unpack_canvases.cc $(SRC_FILES)
 unpack_twotrianglegraphs: main_unpack_twotrianglegraphs.cc $(SRC_FILES)
 	g++ $(PERFORMFLAGS) -o unpack_twotrianglegraphs main_unpack_twotrianglegraphs.cc *.cpp
 
-sort_codes: main_sort_codes.cc $(SRC_FILES)
-	g++ $(PERFORMFLAGS) -o sort_codes main_sort_codes.cc *.cpp
-
 triangle_identification_torus: main_triangle_identification_torus.cc $(SRC_FILES)
 	g++ $(PERFORMFLAGS) -o triangle_identification_torus main_triangle_identification_torus.cc *.cpp
 
